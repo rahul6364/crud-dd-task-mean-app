@@ -15,7 +15,7 @@ The app manages a list of **tutorials** (title, description, published status) w
 
 > **Place for architecture diagram:**  
 > _Insert image here (high-level architecture: Angular → Nginx → Backend → MongoDB)._  
- `![Architecture](./docs/archi.jpeg)`
+ `![Architecture](docs/archi.jpeg)`
 
 ---
 
