@@ -13,6 +13,17 @@ This project is a **MEAN stack tutorial CRUD application** with a **full DevOps 
 
 The app manages a list of **tutorials** (title, description, published status) with full CRUD and simple search.
 
+## Key DevOps Highlights
+
+- Multi-stage Docker builds for optimized image size
+- Immutable image tagging using Git commit SHA
+- Security scanning with Trivy (block on CRITICAL vulnerabilities)
+- Layer caching using Docker Buildx
+- PR-based validation workflow
+- Automated SSH deployment to VM
+- Reverse proxy architecture with Nginx
+- MongoDB data persistence using Docker volumes
+
  
 <p align="center">
   <img src="docs/archi.jpeg" width="800">
@@ -49,9 +60,11 @@ The app manages a list of **tutorials** (title, description, published status) w
   - GitHub Actions workflow: `.github/workflows/ci-cd.yml`
   - Uses Docker Buildx, Trivy, and SSH deploy to VM
 
-> **Place for request-flow diagram:**  
-> _Insert image here (sequence: Browser → Nginx → Frontend/Backend → MongoDB)._  
-> Example: `![Request Flow](docs/request-flow.png)`
+**Place for request-flow diagram:**  
+<p align="center">
+  <img src="docs/dataflow.jpeg" width="800">
+</p>
+
 
 ---
 
@@ -105,9 +118,10 @@ docker compose up --build
 
 Use this mode to validate containers and app behavior locally before moving to Nginx-only port 80.
 
-> **Place for screenshot:**  
-> _Insert screenshot of the Angular UI running locally._  
-> Example: `![UI Local](docs/ui-local.png)`
+ **Place for screenshot:**  
+<p align="center">
+  <img src="docs/local_ui.png" width="800">
+</p>
 
 ---
 
@@ -196,9 +210,10 @@ docker compose -f docker-compose.hub.yml up -d
 - Open `http://VM_PUBLIC_IP` → app and API via Nginx on port 80
 - MongoDB runs as a **container**; no host install needed.
 
-> **Place for infra diagram:**  
-> _Insert image here (cloud VM with containers: nginx, frontend, backend, mongo)._  
-> Example: `![VM Deployment](docs/vm-deployment.png)`
+ **Place for infra diagram:**  
+<p align="center">
+  <img src="docs/dockerhub.png" width="800">
+</p>
 
 ---
 
@@ -244,6 +259,16 @@ After images are pushed successfully on a **push to `main`/`master`**, the `depl
 
 This keeps the VM in sync with the latest `main` images. To disable auto‑deploy, comment out the `deploy-vm` job in `.github/workflows/ci-cd.yml`.
 
+<p align="center">
+  <img src="docs/github-actions.png" width="800">
+</p>
+
+<p align="center">
+  <img src="docs/docker_ps.png" width="800">
+</p>
+
+
+
 ### Required Secrets / Variables
 
 In GitHub repo → **Settings → Secrets and variables → Actions**:
@@ -278,7 +303,10 @@ If you **only want build + scan + push**, keep the deploy job commented out (as 
 | `docker-compose.hub.yml`           | Use images from Docker Hub on VM |
 | `.github/workflows/ci-cd.yml`      | CI/CD workflow (PR + main) |
 
-> **Place for final result screenshot:**  
-> _Insert image here (UI after creating a few tutorials)._  
-> Example: `![App Screenshot](docs/app-screenshot.png)`
+ **Place for final result screenshot:**  
+<p align="center">
+  <img src="docs/ui.png" width="800">
+</p>
+ 
+
 
