@@ -77,40 +77,34 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build & push backend (with cache)
+      # 1) Build images locally (no push), using cache
+      - name: Build backend image (no push)
         uses: docker/build-push-action@v6
         with:
           context: ./backend
           file: ./backend/Dockerfile
-          push: true
-          tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/dd-backend:latest
-            ${{ vars.DOCKERHUB_USERNAME }}/dd-backend:${{ github.sha }}
+          push: false
+          load: true
+          tags: backend-ci:${{ github.sha }}
           cache-from: type=gha,scope=backend
           cache-to: type=gha,mode=max,scope=backend
 
-      - name: Build & push frontend (with cache)
+      - name: Build frontend image (no push)
         uses: docker/build-push-action@v6
         with:
           context: ./frontend
           file: ./frontend/Dockerfile
-          push: true
-          tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/dd-frontend:latest
-            ${{ vars.DOCKERHUB_USERNAME }}/dd-frontend:${{ github.sha }}
+          push: false
+          load: true
+          tags: frontend-ci:${{ github.sha }}
           cache-from: type=gha,scope=frontend
           cache-to: type=gha,mode=max,scope=frontend
 
+      # 2) Scan local images with Trivy; fail here if critical vulns
       - name: Trivy scan backend (main)
         uses: aquasecurity/trivy-action@0.24.0
         with:
-          image-ref: ${{ vars.DOCKERHUB_USERNAME }}/dd-backend:${{ github.sha }}
+          image-ref: backend-ci:${{ github.sha }}
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
@@ -120,12 +114,35 @@ jobs:
       - name: Trivy scan frontend (main)
         uses: aquasecurity/trivy-action@0.24.0
         with:
-          image-ref: ${{ vars.DOCKERHUB_USERNAME }}/dd-frontend:${{ github.sha }}
+          image-ref: frontend-ci:${{ github.sha }}
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL'
+
+      # 3) Only if scans passed, log in & push SHA + latest tags
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Tag and push images (backend & frontend)
+        run: |
+          set -e
+          # Backend
+          docker tag backend-ci:${GITHUB_SHA} ${DOCKERHUB_USERNAME}/dd-backend:${GITHUB_SHA}
+          docker tag backend-ci:${GITHUB_SHA} ${DOCKERHUB_USERNAME}/dd-backend:latest
+          docker push ${DOCKERHUB_USERNAME}/dd-backend:${GITHUB_SHA}
+          docker push ${DOCKERHUB_USERNAME}/dd-backend:latest
+          # Frontend
+          docker tag frontend-ci:${GITHUB_SHA} ${DOCKERHUB_USERNAME}/dd-frontend:${GITHUB_SHA}
+          docker tag frontend-ci:${GITHUB_SHA} ${DOCKERHUB_USERNAME}/dd-frontend:latest
+          docker push ${DOCKERHUB_USERNAME}/dd-frontend:${GITHUB_SHA}
+          docker push ${DOCKERHUB_USERNAME}/dd-frontend:latest
+        env:
+          DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
 
   # ----------------------------------------
   # Deploy only on main/master push
