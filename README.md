@@ -13,8 +13,7 @@ This project is a **MEAN stack tutorial CRUD application** with a **full DevOps 
 
 The app manages a list of **tutorials** (title, description, published status) with full CRUD and simple search.
 
-> **Place for architecture diagram:**  
-> _Insert image here (high-level architecture: Angular → Nginx → Backend → MongoDB)._  
+ 
  `![Architecture](docs/archi.jpeg)`
 
 ---
