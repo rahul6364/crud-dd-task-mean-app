@@ -147,26 +147,26 @@ jobs:
           DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
 
   # ----------------------------------------
-  # Deploy only on main/master push
-  # ----------------------------------------
-  # deploy-vm:
-  #   needs: build-scan-push-main
-  #   if: github.event_name == 'push'
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Deploy to VM (pull, prune old images, safe restart)
-  #       uses: appleboy/ssh-action@v1.0.3
-  #       with:
-  #         host: ${{ secrets.VM_HOST }}
-  #         username: ${{ secrets.VM_USER }}
-  #         key: ${{ secrets.VM_SSH_KEY }}
-  #         script: |
-  #           set -e
-  #           export DOCKERHUB_USERNAME='${{ vars.DOCKERHUB_USERNAME }}'
-  #           cd ${{ secrets.VM_APP_PATH }}
-  #           git pull origin main || git pull origin master
-  #           docker compose -f docker-compose.hub.yml pull
-  #           # Remote prune: clean up dangling / old images (safe-ish)
-  #           docker image prune -af --filter "until=24h" || true
-  #           # Safe restart of stack
-  #           docker compose -f docker-compose.hub.yml up -d
+  #Deploy only on main/master push
+  #----------------------------------------
+  deploy-vm:
+    needs: build-scan-push-main
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VM (pull, prune old images, safe restart)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          script: |
+            set -e
+            export DOCKERHUB_USERNAME='${{ vars.DOCKERHUB_USERNAME }}'
+            cd ${{ secrets.VM_APP_PATH }}
+            git pull origin main || git pull origin master
+            docker compose -f docker-compose.hub.yml pull
+            # Remote prune: clean up dangling / old images (safe-ish)
+            docker image prune -af --filter "until=24h" || true
+            # Safe restart of stack
+            docker compose -f docker-compose.hub.yml up -d
