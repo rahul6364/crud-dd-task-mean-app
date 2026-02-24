@@ -1,0 +1,14 @@
+node_modules
+dist
+.angular
+npm-debug.log
+.git
+.gitignore
+.env
+.env.*
+*.md
+Dockerfile
+.dockerignore
+*.spec.ts
+karma.conf.js
+coverage
