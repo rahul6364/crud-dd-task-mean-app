@@ -29,7 +29,7 @@ npx ng serve --port 8081
 
 You can modify `src/app/services/tutorial.service.ts` or `src/environments/environment.ts` to adjust how the frontend talks to the backend.
 
-Navigate to `http://localhost:8081/`
+Navigate to `http://localhost:8081`
 
 ---
 
@@ -39,7 +39,7 @@ From the project root:
 
 ```bash
 # Build and run (frontend on port 80, backend on 8080, MongoDB on 27017)
-docker compose up --build
+docker compose up --build -d
 ```
 
 - Frontend: http://localhost:80  
