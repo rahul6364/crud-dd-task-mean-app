@@ -157,7 +157,7 @@ jobs:
       - name: Deploy to VM (pull, prune old images, safe restart)
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.VM_HOST }}
+          host: ${{ vars.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
