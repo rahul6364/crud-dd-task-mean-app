@@ -24,7 +24,7 @@ The app manages a list of **tutorials** (title, description, published status) w
 - Reverse proxy architecture with Nginx
 - MongoDB data persistence using Docker volumes
 
- 
+**Architecture diagram:**  
 <p align="center">
   <img src="docs/archi.jpeg" width="800">
 </p>
@@ -60,7 +60,7 @@ The app manages a list of **tutorials** (title, description, published status) w
   - GitHub Actions workflow: `.github/workflows/ci-cd.yml`
   - Uses Docker Buildx, Trivy, and SSH deploy to VM
 
-**Place for request-flow diagram:**  
+**request-flow diagram:**  
 <p align="center">
   <img src="docs/dataflow.jpeg" width="800">
 </p>
@@ -118,7 +118,7 @@ docker compose up --build
 
 Use this mode to validate containers and app behavior locally before moving to Nginx-only port 80.
 
- **Place for screenshot:**  
+ **App running on localhost:**  
 <p align="center">
   <img src="docs/local_ui.png" width="800">
 </p>
@@ -210,9 +210,15 @@ docker compose -f docker-compose.hub.yml up -d
 - Open `http://VM_PUBLIC_IP` → app and API via Nginx on port 80
 - MongoDB runs as a **container**; no host install needed.
 
- **Place for infra diagram:**  
+ **dockerhub**  
 <p align="center">
   <img src="docs/dockerhub.png" width="800">
+</p>
+<p align="center">
+  <img src="docs/fronend-dd.png" width="800">
+</p>
+<p align="center">
+  <img src="docs/backend-dd.png" width="800">
 </p>
 
 ---
