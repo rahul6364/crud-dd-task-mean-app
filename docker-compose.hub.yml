@@ -1,6 +1,6 @@
 # VM deployment: use pre-built images from Docker Hub (no build).
 # Set DOCKERHUB_USERNAME before running:
-#   export DOCKERHUB_USERNAME=your-dockerhub-username
+# export DOCKERHUB_USERNAME=rahul6364
 #   docker compose -f docker-compose.hub.yml pull
 #   docker compose -f docker-compose.hub.yml up -d
 
