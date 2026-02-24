@@ -14,7 +14,9 @@ This project is a **MEAN stack tutorial CRUD application** with a **full DevOps 
 The app manages a list of **tutorials** (title, description, published status) with full CRUD and simple search.
 
  
- `![Architecture](docs/archi.jpeg)`
+<p align="center">
+  <img src="docs/archi.jpeg" width="800">
+</p>
 
 ---
 
