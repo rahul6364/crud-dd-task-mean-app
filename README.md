@@ -142,3 +142,6 @@ If you only want build-and-push (no deploy), you can remove or comment out the `
 | `docker-compose.hub.yml`   | Same as prod but uses Docker Hub images (for VM) |
 | `nginx/nginx.conf`         | Nginx reverse proxy: `/` → frontend, `/api/` → backend |
 | `.github/workflows/ci-cd.yml` | Build, push to Docker Hub, optional deploy to VM |
+
+
+added 2 types of the pipelines triggers 
